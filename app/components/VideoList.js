@@ -1,21 +1,30 @@
 var React = require('react');
+var VideoListItem = require('./VideoListItem.js');
 
-var VideoList = React.createClass({
-  render: function (){
+var VideoList = React.createClass ({
+  render: function() {
+    console.log(this.props.items);
+    var videos = this.props.items.map(function(video, key) {
+      return (
+        <VideoListItem
+          key={key}
+          videoId={video.id.videoId}
+          snippet={video.snippet}
+          state={false}
+        />
+      );
+    });
 
-    var videoListInfo = this.props.data ?
-      (
-        <div className="row">
-          <div className="col-lg-4">
-            <img className="square" src={this.props.data.items.snippet.thumbnails.high.url} alt="avatar" width="480" height="360">
-            <h2>{this.props.data.items.snippet.title}</h2>
-          </div>
-        </div>
-      ) : null;
-
-    return videoListInfo;
+    return (
+      <div className="left-negative-buffer">
+        {videos}
+      </div>
+    );
   }
+});
 
-})
+VideoList.propTypes = {
+  data: React.PropTypes.array,
+}
 
 module.exports = VideoList;

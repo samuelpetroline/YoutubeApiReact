@@ -1,6 +1,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-var SearchBar = require('./components/SearchBar.js');
+var Page = require('./components/Page');
 
-ReactDOM.render(<SearchBar />, document.getElementById('app'));
+ReactDOM.render(<Page />, document.getElementById('app'));

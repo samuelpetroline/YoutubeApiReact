@@ -47,9 +47,9 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(32);
 
-	var SearchBar = __webpack_require__(178);
+	var Page = __webpack_require__(178);
 
-	ReactDOM.render(React.createElement(SearchBar, null), document.getElementById('app'));
+	ReactDOM.render(React.createElement(Page, null), document.getElementById('app'));
 
 /***/ },
 /* 1 */
@@ -21463,7 +21463,52 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var YoutubeVideoList = __webpack_require__(179);
+	var SearchBar = __webpack_require__(179);
+	var VideoList = __webpack_require__(206);
+
+	var Page = React.createClass({
+	  displayName: 'Page',
+
+	  getInitialState: function () {
+	    return {
+	      items: []
+	    };
+	  },
+
+	  updateVideoList: function (items) {
+	    this.setState({ items: items });
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'container' },
+	      React.createElement(
+	        'div',
+	        { id: 'search-bar', className: 'row top-buffer' },
+	        React.createElement(SearchBar, {
+	          updateVideoList: this.updateVideoList
+	        })
+	      ),
+	      React.createElement(
+	        'div',
+	        { id: 'video-list' },
+	        React.createElement(VideoList, {
+	          items: this.state.items
+	        })
+	      )
+	    );
+	  }
+	});
+
+	module.exports = Page;
+
+/***/ },
+/* 179 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var YoutubeVideoList = __webpack_require__(180);
 
 	var SearchBar = React.createClass({
 	  displayName: 'SearchBar',
@@ -21478,38 +21523,51 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'input-group' },
+	      { className: 'input' },
 	      React.createElement(
 	        'form',
-	        { className: 'form-inline', onSubmit: this.handleSubmit },
+	        { onSubmit: this.handleSubmit },
 	        React.createElement(
 	          'div',
-	          { className: 'form-group' },
-	          React.createElement('input', { type: 'text', className: 'form-control form-control-lg', ref: 'keywords', placeholder: 'Pesquisar ' })
-	        ),
-	        React.createElement(
-	          'button',
-	          { type: 'submit', className: 'btn btn-default' },
-	          'Go!'
+	          { className: 'input-group' },
+	          React.createElement('input', { type: 'text', className: 'form-control', ref: 'keywords', placeholder: 'Pesquisar' }),
+	          React.createElement(
+	            'div',
+	            { className: 'input-group-btn' },
+	            React.createElement(
+	              'button',
+	              { className: 'btn btn-default', type: 'submit' },
+	              React.createElement('i', { className: 'glyphicon glyphicon-search' })
+	            )
+	          )
 	        )
 	      )
 	    );
 	  }
 	});
 
+	SearchBar.propTypes = {
+	  updateVideoList: React.PropTypes.func.isRequired
+	};
+
 	module.exports = SearchBar;
 
 /***/ },
-/* 179 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var axios = __webpack_require__(180);
+	var axios = __webpack_require__(181);
 	var API_KEY = 'AIzaSyCETmhYq-ed314VpSWeRuMbAvNNlMQnS8w';
 
 	var YoutubeVideoList = {
 
 	  getVideoListByKeyword: function (keyword) {
 	    return axios.get('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&order=relevance&q=' + keyword + '&type=video&key=' + API_KEY);
+	  },
+
+	  getRelatedVideosByVideoId: function (videoId) {
+	    console.log('https://www.googleapis.com/youtube/v3/search?part=id%2C+snippet&maxResults=2&relatedToVideoId=' + videoId + '&type=video&key=' + API_KEY);
+	    return axios.get('https://www.googleapis.com/youtube/v3/search?part=id%2C+snippet&maxResults=2&relatedToVideoId=' + videoId + '&type=video&key=' + API_KEY);
 	  }
 
 	};
@@ -21517,21 +21575,21 @@
 	module.exports = YoutubeVideoList;
 
 /***/ },
-/* 180 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(181);
+	module.exports = __webpack_require__(182);
 
 /***/ },
-/* 181 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(182);
-	var bind = __webpack_require__(183);
-	var Axios = __webpack_require__(184);
-	var defaults = __webpack_require__(185);
+	var utils = __webpack_require__(183);
+	var bind = __webpack_require__(184);
+	var Axios = __webpack_require__(185);
+	var defaults = __webpack_require__(186);
 
 	/**
 	 * Create an instance of Axios
@@ -21564,15 +21622,15 @@
 	};
 
 	// Expose Cancel & CancelToken
-	axios.Cancel = __webpack_require__(202);
-	axios.CancelToken = __webpack_require__(203);
-	axios.isCancel = __webpack_require__(199);
+	axios.Cancel = __webpack_require__(203);
+	axios.CancelToken = __webpack_require__(204);
+	axios.isCancel = __webpack_require__(200);
 
 	// Expose all/spread
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(204);
+	axios.spread = __webpack_require__(205);
 
 	module.exports = axios;
 
@@ -21581,12 +21639,12 @@
 
 
 /***/ },
-/* 182 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var bind = __webpack_require__(183);
+	var bind = __webpack_require__(184);
 
 	/*global toString:true*/
 
@@ -21886,7 +21944,7 @@
 
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -21903,17 +21961,17 @@
 
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaults = __webpack_require__(185);
-	var utils = __webpack_require__(182);
-	var InterceptorManager = __webpack_require__(196);
-	var dispatchRequest = __webpack_require__(197);
-	var isAbsoluteURL = __webpack_require__(200);
-	var combineURLs = __webpack_require__(201);
+	var defaults = __webpack_require__(186);
+	var utils = __webpack_require__(183);
+	var InterceptorManager = __webpack_require__(197);
+	var dispatchRequest = __webpack_require__(198);
+	var isAbsoluteURL = __webpack_require__(201);
+	var combineURLs = __webpack_require__(202);
 
 	/**
 	 * Create a new instance of Axios
@@ -21994,13 +22052,13 @@
 
 
 /***/ },
-/* 185 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(182);
-	var normalizeHeaderName = __webpack_require__(186);
+	var utils = __webpack_require__(183);
+	var normalizeHeaderName = __webpack_require__(187);
 
 	var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 	var DEFAULT_CONTENT_TYPE = {
@@ -22017,10 +22075,10 @@
 	  var adapter;
 	  if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(187);
+	    adapter = __webpack_require__(188);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(187);
+	    adapter = __webpack_require__(188);
 	  }
 	  return adapter;
 	}
@@ -22094,12 +22152,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(182);
+	var utils = __webpack_require__(183);
 
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -22112,18 +22170,18 @@
 
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(182);
-	var settle = __webpack_require__(188);
-	var buildURL = __webpack_require__(191);
-	var parseHeaders = __webpack_require__(192);
-	var isURLSameOrigin = __webpack_require__(193);
-	var createError = __webpack_require__(189);
-	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(194);
+	var utils = __webpack_require__(183);
+	var settle = __webpack_require__(189);
+	var buildURL = __webpack_require__(192);
+	var parseHeaders = __webpack_require__(193);
+	var isURLSameOrigin = __webpack_require__(194);
+	var createError = __webpack_require__(190);
+	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(195);
 
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -22219,7 +22277,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(195);
+	      var cookies = __webpack_require__(196);
 
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -22296,12 +22354,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var createError = __webpack_require__(189);
+	var createError = __webpack_require__(190);
 
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -22327,12 +22385,12 @@
 
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var enhanceError = __webpack_require__(190);
+	var enhanceError = __webpack_require__(191);
 
 	/**
 	 * Create an Error with the specified message, config, error code, and response.
@@ -22350,7 +22408,7 @@
 
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22375,12 +22433,12 @@
 
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(182);
+	var utils = __webpack_require__(183);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -22449,12 +22507,12 @@
 
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(182);
+	var utils = __webpack_require__(183);
 
 	/**
 	 * Parse headers into an object
@@ -22492,12 +22550,12 @@
 
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(182);
+	var utils = __webpack_require__(183);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -22566,7 +22624,7 @@
 
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22608,12 +22666,12 @@
 
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(182);
+	var utils = __webpack_require__(183);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -22667,12 +22725,12 @@
 
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(182);
+	var utils = __webpack_require__(183);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -22725,15 +22783,15 @@
 
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(182);
-	var transformData = __webpack_require__(198);
-	var isCancel = __webpack_require__(199);
-	var defaults = __webpack_require__(185);
+	var utils = __webpack_require__(183);
+	var transformData = __webpack_require__(199);
+	var isCancel = __webpack_require__(200);
+	var defaults = __webpack_require__(186);
 
 	/**
 	 * Throws a `Cancel` if cancellation has been requested.
@@ -22810,12 +22868,12 @@
 
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(182);
+	var utils = __webpack_require__(183);
 
 	/**
 	 * Transform the data for a request or a response
@@ -22836,7 +22894,7 @@
 
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22847,7 +22905,7 @@
 
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22867,7 +22925,7 @@
 
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22885,7 +22943,7 @@
 
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22910,12 +22968,12 @@
 
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Cancel = __webpack_require__(202);
+	var Cancel = __webpack_require__(203);
 
 	/**
 	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -22973,7 +23031,7 @@
 
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23004,6 +23062,333 @@
 	  };
 	};
 
+
+/***/ },
+/* 206 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var VideoListItem = __webpack_require__(207);
+
+	var VideoList = React.createClass({
+	  displayName: 'VideoList',
+
+	  render: function () {
+	    console.log(this.props.items);
+	    var videos = this.props.items.map(function (video, key) {
+	      return React.createElement(VideoListItem, {
+	        key: key,
+	        videoId: video.id.videoId,
+	        snippet: video.snippet,
+	        state: false
+	      });
+	    });
+
+	    return React.createElement(
+	      'div',
+	      { className: 'left-negative-buffer' },
+	      videos
+	    );
+	  }
+	});
+
+	VideoList.propTypes = {
+	  data: React.PropTypes.array
+	};
+
+	module.exports = VideoList;
+
+/***/ },
+/* 207 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var VideoPage = __webpack_require__(208);
+	var VideoDescription = __webpack_require__(209);
+
+	const styles = {
+	  active: {
+	    display: 'inherit'
+	  },
+	  inactive: {
+	    display: 'none'
+	  }
+	};
+
+	var VideoListItem = React.createClass({
+	  displayName: 'VideoListItem',
+
+	  getInitialState: function () {
+	    return {
+	      active: false
+	    };
+	  },
+
+	  handleClick: function () {
+	    /*console.log(this.props.videoId);*/
+	    this.toggle();
+	  },
+
+	  toggle: function () {
+	    this.setState({
+	      active: !this.state.active
+	    });
+	  },
+
+	  updateVideoState: function () {
+	    this.setState({ style: this.state.active ? styles.active : styles.inactive });
+	  },
+
+	  render: function () {
+	    const stateStyle = this.state.active ? styles.active : styles.inactive;
+
+	    return React.createElement(
+	      'div',
+	      { key: this.props.videoId, className: 'row top-buffer', onClick: this.handleClick, width: '300', height: '180' },
+	      React.createElement(
+	        'div',
+	        { className: 'col-md-12' },
+	        React.createElement(
+	          'div',
+	          { className: 'col-md-4' },
+	          React.createElement('img', { className: 'thumbnail',
+	            src: this.props.snippet.thumbnails.high.url, alt: 'thumbnail', width: '300', height: '180'
+	          })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'col-md-8 caption title-border top-buffer h-100' },
+	          React.createElement(
+	            'h4',
+	            { className: 'video-title' },
+	            this.props.snippet.title
+	          ),
+	          React.createElement(VideoDescription, {
+	            className: 'video-description lead',
+	            description: this.props.snippet.description
+	          })
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'video-player top-buffer row left-buffer' },
+	        React.createElement(VideoPage, {
+	          style: stateStyle,
+	          snippet: this.props.snippet,
+	          videoId: this.props.videoId,
+	          updateVideoState: this.updateVideoState
+	        })
+	      )
+	    );
+	  }
+	});
+
+	VideoListItem.propTypes = {
+	  videoId: React.PropTypes.string,
+	  snippet: React.PropTypes.object,
+	  state: React.PropTypes.bool
+	};
+
+	module.exports = VideoListItem;
+
+/***/ },
+/* 208 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var VideoDescription = __webpack_require__(209);
+	var VideoRelated = __webpack_require__(210);
+	var YoutubeVideoList = __webpack_require__(180);
+
+	var VideoPage = React.createClass({
+	  displayName: 'VideoPage',
+
+	  getInitialState: function () {
+	    return {
+	      active: false
+	    };
+	  },
+
+	  handleClick: function () {
+	    this.setState({ active: !this.state.active });
+	    this.props.updateVideoState();
+	    this.toggleVideoAudio();
+	  },
+
+	  toggleVideoAudio: function () {
+	    if (!this.state.active) {
+	      {/*
+	         console.log(this.props);
+	         pausar o iframe ao minimizá-lo
+	        */}
+	    }
+	  },
+
+	  render: function () {
+
+	    return React.createElement(
+	      'div',
+	      { className: 'col-md-12' },
+	      React.createElement(
+	        'div',
+	        { className: 'video-player row' },
+	        React.createElement(
+	          'div',
+	          { className: 'col-md-7' },
+	          React.createElement('iframe', {
+	            className: 'video-border',
+	            key: this.props.videoId,
+	            width: '560',
+	            height: '315',
+	            src: "https://www.youtube.com/embed/" + this.props.videoId + "?enablejsapi=1",
+	            frameBorder: '0',
+	            allowFullScreen: 'false',
+	            style: this.props.style,
+	            onClick: this.handleClick })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'col-md-5' },
+	          React.createElement(VideoRelated, {
+	            style: this.props.style,
+	            videoId: this.props.videoId
+	          })
+	        )
+	      )
+	    );
+	  }
+	});
+
+	VideoPage.propTypes = {
+	  style: React.PropTypes.object,
+	  videoId: React.PropTypes.string,
+	  snippet: React.PropTypes.object,
+	  updateVideoState: React.PropTypes.func.isRequired
+	};
+
+	module.exports = VideoPage;
+
+/***/ },
+/* 209 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var VideoDescription = React.createClass({
+	  displayName: "VideoDescription",
+
+
+	  toggleVideoAudio: function () {
+	    if (this.state.active) {
+	      console.log(this.props);
+	    }
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "video-description", style: this.props.style },
+	      React.createElement(
+	        "p",
+	        null,
+	        this.props.description
+	      )
+	    );
+	  }
+	});
+
+	VideoDescription.propTypes = {
+	  description: React.PropTypes.string.isRequired,
+	  style: React.PropTypes.object
+	};
+
+	module.exports = VideoDescription;
+
+/***/ },
+/* 210 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var VideoDescription = __webpack_require__(209);
+	var YoutubeVideoList = __webpack_require__(180);
+
+	var VideoRelated = React.createClass({
+	  displayName: 'VideoRelated',
+
+	  getInitialState: function () {
+	    return {
+	      active: false,
+	      related: []
+	    };
+	  },
+
+	  componentWillReceiveProps: function (props) {
+	    YoutubeVideoList.getRelatedVideosByVideoId(props.videoId).then(function (response) {
+	      this.setState({ related: response.data.items });
+	    }.bind(this));
+	  },
+
+	  handleClick: function () {
+	    this.setState({ active: !this.state.active });
+	    this.props.updateVideoState();
+	    this.toggleVideoAudio();
+	  },
+
+	  toggleVideoAudio: function () {
+	    if (!this.state.active) {
+	      {/*
+	         console.log(this.props);
+	         pausar o iframe ao minimizá-lo
+	        */}
+	    }
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'col-md-6' },
+	        React.createElement(
+	          'div',
+	          { className: 'row' },
+	          React.createElement(
+	            'p',
+	            { className: 'lead', style: this.props.style },
+	            ' Videos Relacionados: '
+	          )
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'col-md-6' },
+	        this.state.related.map(function (video, key) {
+	          console.log(video);
+	          return React.createElement(
+	            'div',
+	            { className: 'row left-buffer video-related' },
+	            React.createElement('iframe', {
+	              key: video.id.videoId,
+	              width: '150',
+	              height: '130',
+	              src: "https://www.youtube.com/embed/" + video.id.videoId + "?enablejsapi=1",
+	              frameBorder: '0',
+	              allowFullScreen: 'false',
+	              style: this.props.style })
+	          );
+	        }.bind(this))
+	      )
+	    );
+	  }
+	});
+
+	VideoRelated.propTypes = {
+	  style: React.PropTypes.object,
+	  videoId: React.PropTypes.string
+	};
+
+	module.exports = VideoRelated;
 
 /***/ }
 /******/ ]);

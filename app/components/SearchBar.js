@@ -11,17 +11,25 @@ var SearchBar = React.createClass({
   },
   render: function() {
     return (
-      <div className="input-group">
-        <form className= "form-inline" onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <input type="text" className="form-control form-control-lg" ref="keywords" placeholder="Pesquisar "/>
+      <div className="input">
+        <form onSubmit={this.handleSubmit}>
+          <div className="input-group">
+            <input type="text" className="form-control" ref="keywords" placeholder="Pesquisar"/>
+              <div className="input-group-btn">
+                <button className="btn btn-default" type="submit">
+                  <i className="glyphicon glyphicon-search"></i>
+                </button>
+              </div>
           </div>
-          <button type="submit" className="btn btn-default">Go!</button>
         </form>
       </div>
 
     );
   }
 });
+
+SearchBar.propTypes = {
+  updateVideoList: React.PropTypes.func.isRequired,
+}
 
 module.exports = SearchBar;

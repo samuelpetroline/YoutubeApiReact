@@ -1,0 +1,61 @@
+body
+{
+  background-color: #ECECEC;
+}
+.left-buffer
+{
+  margin-left: 20px;
+}
+
+.left-negative-buffer
+{
+  margin-left: -30px;
+}
+.top-buffer
+{
+  margin-top:15px;
+}
+
+.video-title
+{
+  color: #167ac6;
+}
+
+.video-description
+{
+  color: #767676;
+}
+
+.video-border
+{
+    border-spacing: 10px 50px;
+    border-left: 6px solid #167ac6;
+}
+
+.title-border
+{
+    padding-left: : 5 0px;
+    border-left: 1px solid #bdc3c7;
+}
+
+.video-related:last-child
+{
+  margin-top: 30px;
+}
+
+
+/*
+.row.vdivide [class*='col-']:not(:last-child):after
+{
+  background: #bdc3c7;
+  width: 1px;
+  content: "";
+  display:block;
+  position: absolute;
+  top:0;
+  padding-left: -10px;
+  bottom: 0;
+  right: 0;
+  min-height: 70px;
+}
+*/
